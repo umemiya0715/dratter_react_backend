@@ -1,8 +1,8 @@
 ## Dratter
 
 ## 注意
-このレポジトリは作者の勉強用として上記のアプリをReact(Next.js)とTypeScriptで作ったバージョンです。
-基本的にはVueで作ったものと同じ機能になります。
+このレポジトリは作者の勉強用として過去に作った[アプリ](#https://github.com/umemiya0715/Dratter)をReact(Next.js)とTypeScriptで作ったバージョンです。
+基本的にはVueで作ったものと同じ機能になり、このリポジトリはバックエンド側(RubyとRails)となります。
 
 ## サービス概要
 Twitterのツイートを感情分析することで、<br>
