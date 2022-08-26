@@ -1,22 +1,27 @@
 FROM ruby:3.1.2
 
-RUN rm -rf /var/lib/apt/lists/*
-RUN apt-get update -qq && \
-    apt-get install -y build-essential \
-                       vim
+ENV BUNDLE_VERSION 2.3.7
+ENV APP /usr/src/app
 
-RUN mkdir /app
-ENV APP_ROOT /app
-WORKDIR $APP_ROOT
+RUN set -eux && \
+    apt update -qq && \
+    apt install -y build-essential \
+    libpq-dev \
+    sudo
+RUN gem install bundler -v $BUNDLE_VERSION
 
-ADD ./Gemfile /app/Gemfile 
-ADD ./Gemfile.lock /app/Gemfile.lock
+RUN mkdir $APP
+WORKDIR $APP
+
+COPY Gemfile* $APP/
 RUN bundle install
-COPY . .
 
-COPY entrypoint.sh /usr/bin/
-RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+COPY . $APP/
+
+# Add a script to be executed every time the container starts.
+# COPY ./entrypoint.sh /usr/bin/
+# ENTRYPOINT ["entrypoint.sh"]
+
 EXPOSE 3000
 
-CMD ["rails", "server", "-b", "0.0.0.0"]
+CMD ["./bin/server-dev"]

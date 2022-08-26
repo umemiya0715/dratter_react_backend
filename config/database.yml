@@ -8,28 +8,31 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  socket: /tmp/mysql.sock
-  host: localhost
+  charset: utf8mb4
+  encoding: utf8mb4
+  collation: utf8mb4_general_ci
+
+local: &local
+  socket: /var/run/mysqld/mysqlx.sock
+  port: <%= Rails.application.credentials.local[:port] %>
+  host: <%= Rails.application.credentials.local[:host] %>
+  username: <%= Rails.application.credentials.local[:username] %>
+  password: <%= Rails.application.credentials.local[:password] %>
 
 development:
   <<: *default
+  <<: *local
   database: dratter_react_development
-  password: <%= Rails.application.credentials.development[:password] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
+  <<: *local
   database: dratter_react_test
-  password: <%= Rails.application.credentials.test[:password] %> 
 
 production:
   <<: *default
-  database: dratter_react_production
-  username: <%= Rails.application.credentials.production[:username] %>
-  password: <%= Rails.application.credentials.production[:password] %>
-  host: <%= Rails.application.credentials.production[:host] %>
-  pool: 5
-  timeout: 5000
+  url: <%= Rails.application.credentials.production[:url] %>
+  socket: /tmp/mysql.sock
